@@ -39,6 +39,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
     // .create() is Sequalize's "insert data" method
+    // post carries the request param in the req.body (MORE SECURE THAN IN 'GET' METHOD!)
     User.create({
       username: req.body.username,
       email: req.body.email,
@@ -51,6 +52,34 @@ router.post('/', (req, res) => {
       });
   });
 
+
+  router.post('/login', (req, res) => {
+    // expects {email: 'lernantino@gmail.com', password: 'password1234'}
+    // queries the USER table using the findOne() method for email entered by user
+      User.findOne({
+        where: {
+          email: req.body.email
+        }
+        // result of query above is passed as dbUserData to the .then() part of this method
+      }).then(dbUserData => {
+        if (!dbUserData) {
+          res.status(400).json({ message: 'No user with that email address!' });
+          return;
+        }
+   
+        // Verify user w/ this expression
+        const validPassword = dbUserData.checkPassword(req.body.password);
+          if (!validPassword) {
+            res.status(400).json({ message: 'Incorrect password!' });
+            return;
+          }
+          
+          res.json({ user: dbUserData, message: 'You are now logged in!' });
+    
+      });  
+    });
+
+
 // PUT /api/users/1
 router.put('/:id', (req, res) => {
     // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
@@ -59,6 +88,8 @@ router.put('/:id', (req, res) => {
 
     // .update() is Sequalize's combine "create and look up data" method
     User.update(req.body, {
+      // pass in req.body instead to only update what's passed through
+      individualHooks: true,
       where: {
         id: req.params.id
       }
