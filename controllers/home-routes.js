@@ -38,4 +38,8 @@ router.get('/', (req, res) => {
    });
 });
 
+// connection for login functionality in login.handlebars
+router.get('/login', (req, res) => {
+    res.render('login');
+  });
 module.exports = router;
