@@ -1,35 +1,40 @@
-{{!-- Main layout setup for handlebars must be tucked into views/layouts/mainlhandlebars --}}
-{{!-- views folder is a required UI component b/c of Model-View-Controller architectural stx for handlebars --}}
-<!DOCTYPE html>
+{{! Main layout setup for handlebars must be tucked into views/layouts/mainlhandlebars }}
+{{! views folder is a required UI component b/c of Model-View-Controller architectural stx for handlebars }}
+
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Just Tech News</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Tech News</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
 
-<body>
-  <div class="wrapper">
-    <header>
+  <body>
+    <div class="wrapper">
+      <header>
         <h1>
-        <a href="/">Just Tech News</a>
+          <a href="/">Just Tech News</a>
         </h1>
-         <nav>
-          <button id="logout" class="btn-no-style">logout</button>
-          <a href="/login">login</a>
+        <nav>
+          {{#if loggedIn}}
+            <button id="logout" class="btn-no-style">logout</button>
+          {{else}}
+            <a href="/login">login</a>
+          {{/if}}
         </nav>
-    </header>
-    <main>
+      </header>
+      <main>
         <!-- {{{ body }}} is special placeholder element for handlebar to plug in data later -->
-      {{{ body }}}
-    </main>
-    <footer>
-      Thanks for visiting!
-    </footer>
-  </div>
-  <script src="/javascript/logout.js"></script>
-</body>
+        {{{body}}}
+      </main>
+      <footer>
+        Thanks for visiting!
+      </footer>
+    </div>
+    {{#if loggedIn}}
+      <script src="/javascript/logout.js"></script>
+    {{/if}}
+  </body>
 
 </html>
