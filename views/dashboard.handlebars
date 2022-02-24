@@ -13,3 +13,21 @@
     <button type="submit" class="btn">Create</button>
   </form>
 </section>
+
+{{!-- allows use of template in dashboard-routes.js --}}
+{{#if posts.length}}
+<section>
+  <h2>Your Posts</h2>
+  <ol>
+    {{#each posts as |post|}}
+    <li>
+      {{> post-info post}}
+      <a href="/dashboard/edit/{{post.id}}" class="edit-link">Edit post</a>
+    </li>
+    {{/each}}
+  </ol>
+</section>
+{{/if}}
+
+{{!-- links to file that dashboard uses to create new post --}}
+<script src="/javascript/add-post.js"></script>
