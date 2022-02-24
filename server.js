@@ -3,6 +3,8 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 
+const app = express();
+const PORT = process.env.PORT || 3001;
 
 // routes file was renamed to controllers...
 const routes = require('./controllers');
@@ -20,9 +22,11 @@ const sess = {
   })
 };
 
-const app = express();
-const PORT = process.env.PORT || 3001;
-const hbs = exphbs.create({});
+app.use(session(sess));
+
+// implement helpers from test fxns
+const helpers = require('./utils/helpers');
+const hbs = exphbs.create({ helpers });
 
 // connects to handlebar template; handlebar template lives in view/layouts/main.handlebars
 app.engine('handlebars', hbs.engine);
@@ -32,11 +36,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session(sess));
-
-// implement helpers from test fxns
-const helpers = require('./utils/helpers');
-const hbs = exphbs.create({ helpers });
 
 // turn on routes
 app.use(routes);
