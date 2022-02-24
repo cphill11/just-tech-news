@@ -6,7 +6,8 @@
       <div class="meta">
         {{user.username}}
         on
-        {{created_at}}
+        {{!-- replaced {{created_at}} to use helpers --}}
+        {{format_date created_at}}
       </div>
       <div class="text">
         {{comment_text}}

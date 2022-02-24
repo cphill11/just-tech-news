@@ -3,6 +3,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 
+
 // routes file was renamed to controllers...
 const routes = require('./controllers');
 
@@ -32,6 +33,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session(sess));
+
+// implement helpers from test fxns
+const helpers = require('./utils/helpers');
+const hbs = exphbs.create({ helpers });
 
 // turn on routes
 app.use(routes);
