@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const sequelize = require("../config/connection");
 const { Post, User, Comment } = require("../models");
-const withAuth = require('../utils/auth');
+const withAuth = require("../utils/auth");
 
 // GET route for main page; withAuth calls next anonymous fxn
-router.get('/', withAuth, (req, res) => {
+router.get("/", withAuth, (req, res) => {
   Post.findAll({
     // add where object to findAll() to only display posts created by the logged in user
     where: {
@@ -38,13 +38,20 @@ router.get('/', withAuth, (req, res) => {
       },
     ],
   })
+  // render edit-post.handlebars template, passing in data from same Post.findOne() query used in /post/:id home route
     .then((dbPostData) => {
-      // serialize data before passing to template
-      const posts = dbPostData.map((post) => post.get({ plain: true }));
-      res.render("dashboard", { posts, loggedIn: true });
+      if (dbPostData) {
+        const post = dbPostData.get({ plain: true });
+
+        res.render("edit-post", {
+          post,
+          loggedIn: true,
+        });
+      } else {
+        res.status(404).end();
+      }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json(err);
     });
 });
